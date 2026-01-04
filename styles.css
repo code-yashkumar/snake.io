@@ -9,10 +9,18 @@ html, body{
     width: 100%;
 }
 
+@font-face{
+    font-family: "Betron";
+    src: url("./assets/snake.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root{
     /* background colors */
     --bg-primary-color: #0e0e0e;
     --fill-color: #4c9030;
+    --food-color: #eb5959;
 
     /* text colors */
     --text-primary-color: #ececec;
@@ -95,4 +103,42 @@ section .infos{
     background-color: var(--fill-color);
 }
 
+.food{
+    background-color: var(--food-color);
+}
 
+.modal{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    background-color: #0e0e0e7e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.start-game{
+    background-color: var(--bg-primary-color);
+    padding: var(--space-3xl);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    align-items: center;
+}
+
+.btn{
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background-color: transparent;
+    color: var(--text-primary-color);
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: #3f3f3f;
+}
