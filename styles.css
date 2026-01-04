@@ -12,6 +12,7 @@ html, body{
 :root{
     /* background colors */
     --bg-primary-color: #0e0e0e;
+    --fill-color: #4c9030;
 
     /* text colors */
     --text-primary-color: #ececec;
@@ -27,7 +28,8 @@ html, body{
 
     /* borders */
     --border-color: #8a8a8a;
-
+    --grid-color: #3f3f3f;
+    
     /* border radius */
     --border-radius-xs: 4px;
     --border-radius-sm: 8px;
@@ -77,16 +79,20 @@ section .infos{
     border-radius: var(--border-radius-xs);
     flex-grow: 1;
     display:grid;
-    grid-template-columns: repeat(auto-fill,minmax(30px,1fr));
-    grid-template-rows: repeat(auto-fill,minmax(30px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(50px,1fr));
+    grid-template-rows: repeat(auto-fill,minmax(50px,1fr));
 
 }
 
 .block{
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--border-color);
+    /* width: 30px;
+    height: 30px; */
+    border: 1px solid var(--grid-color);
     flex-shrink: 0;
+}
+
+.fill{
+    background-color: var(--fill-color);
 }
 
 
