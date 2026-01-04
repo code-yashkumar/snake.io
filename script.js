@@ -2,6 +2,12 @@ const board = document.querySelector('.board');
 const highScore = document.querySelector('#high-score');
 const score = document.querySelector('#score');
 const time = document.querySelector('#time');
+const startBtn = document.querySelector('.start-btn');
+const rstBtn = document.querySelector('.rst-btn');
+const modal = document.querySelector('.modal');
+const startModal = document.querySelector('.start-game');
+const rstModal = document.querySelector('.rst-game');
+
 
 const blockHeight=50;
 const blockWidth=50;
@@ -34,60 +40,112 @@ for(let row=0;row<rows;row++){
     }
 }
 
-function renderSnake(){
-    let head=null;
-    blocks[`${food.x},${food.y}`].classList.add('food');
-
-    if(direction==='down'){
-        head={x:snake[0].x+1,y:snake[0].y};
+function getNewHead(dir){
+    let head;
+    if(dir==='down'){
+        return {x:snake[0].x+1,y:snake[0].y};
     }
-    else if(direction==='up'){
-        head={x:snake[0].x-1,y:snake[0].y};
+    else if(dir==='up'){
+        return {x:snake[0].x-1,y:snake[0].y};
     }
-    else if(direction==='left'){
-        head={x:snake[0].x,y:snake[0].y-1};
+    else if(dir==='left'){
+        return {x:snake[0].x,y:snake[0].y-1};
     }
-    else if(direction==='right'){
-        head={x:snake[0].x,y:snake[0].y+1};
+    else if(dir==='right'){
+        return {x:snake[0].x,y:snake[0].y+1};
     }
+}
 
-    if(head.x<0 || head.x>=rows || head.y<0 || head.y>=cols){
-        alert('Game Over');
-        clearInterval(intervalId);
-        return;
-    }
-
-    if(head.x===food.x && head.y===food.y){
-        blocks[`${food.x},${food.y}`].classList.remove('food');
-        food={
-            x:Math.floor(Math.random()*rows),
-            y:Math.floor(Math.random()*cols)
-        }
-        snake.unshift(head);
-    }
-
-
-
+function moveSnake(head,grow=false){
+    //clear
     snake.forEach(segment=>{
         const block=blocks[`${segment.x},${segment.y}`];
         block.classList.remove('fill');
     });
 
+    //apply move
     snake.unshift(head);
-    snake.pop();
+    if(!grow)snake.pop();
 
+    // fill
     snake.forEach(segment=>{
         // console.dir(segment);
         // console.log(blocks[`${segment.x},${segment.y}`]);
         const block=blocks[`${segment.x},${segment.y}`];
         block.classList.add('fill');
-    })
+    });
+
+
+}
+
+function renderGame(){
+    //spawns food
+    blocks[`${food.x},${food.y}`].classList.add('food');
+
+    const head=getNewHead(direction);
+
+    //end game pattern
+    if(head.x<0 || head.x>=rows || head.y<0 || head.y>=cols){
+        // alert('Game Over');
+        modal.style.display='flex';
+        startModal.style.display='none';
+        rstModal.style.display='flex';
+        clearInterval(intervalId);
+        return;
+    }
+
+    //eats food
+    const ateFood=head.x===food.x && head.y===food.y;
+    if(ateFood){
+        blocks[`${food.x},${food.y}`].classList.remove('food');
+        food={
+            x:Math.floor(Math.random()*rows),
+            y:Math.floor(Math.random()*cols)
+        };
+    }
+
+    moveSnake(head,ateFood);
+    
 };
 
-intervalId=setInterval(()=>{
-    renderSnake();  
-},400);
 
+function startGame(){
+    clearInterval(intervalId);
+    modal.style.display= "none" ;
+    intervalId=setInterval(()=>{
+        renderGame();  
+    },400);
+};
+
+function rstGame(){
+    // clear board
+    snake.forEach(seg => {
+        blocks[`${seg.x},${seg.y}`]?.classList.remove('fill');
+    });
+    blocks[`${food.x},${food.y}`]?.classList.remove('food');
+
+    // reset snake
+    snake.length = 0;
+    snake.push({ x: 1, y: 3 });
+
+    // reset direction
+    direction = 'down';
+
+    // reset food
+    food = {
+        x: Math.floor(Math.random() * rows),
+        y: Math.floor(Math.random() * cols)
+    };
+}
+
+startBtn.addEventListener('click',startGame);
+rstBtn.addEventListener('click',()=>{
+    startGame(),
+    rstGame()
+});
+
+
+//controls
 addEventListener('keydown',(e)=>{
     // console.log(e.key);
     if((e.key==='ArrowDown' || e.key==='s' || e.key==='S') && direction!=='up'){

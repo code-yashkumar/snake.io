@@ -10,7 +10,7 @@ html, body{
 }
 
 @font-face{
-    font-family: "Betron";
+    font-family: "Snake";
     src: url("./assets/snake.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
@@ -119,7 +119,7 @@ section .infos{
     backdrop-filter: blur(4px);
 }
 
-.start-game{
+.start-game, .rst-game{
     background-color: var(--bg-primary-color);
     padding: var(--space-3xl);
     border: 1px solid var(--border-color);
@@ -137,8 +137,23 @@ section .infos{
     background-color: transparent;
     color: var(--text-primary-color);
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .btn:hover{
     background-color: #3f3f3f;
+    transform: scale(1.1);
+}
+
+.start-game h3, .rst-game h3{
+    font-family: "Snake", sans-serif;
+    font-size: 2rem;
+}
+
+.rst-game{
+    display: none;
+}
+
+.rst-game h3{
+    color: #ee4b4b;
 }
