@@ -1,7 +1,7 @@
 const board = document.querySelector('.board');
-const highScore = document.querySelector('#high-score');
-const score = document.querySelector('#score');
-const time = document.querySelector('#time');
+const highScoreElement = document.querySelector('#high-score');
+const scoreElement = document.querySelector('#score');
+const timeElement = document.querySelector('#time');
 const startBtn = document.querySelector('.start-btn');
 const rstBtn = document.querySelector('.rst-btn');
 const modal = document.querySelector('.modal');
@@ -26,7 +26,12 @@ const snake=[
     {x:1,y:3},
     // {x:1,y:4},
     // {x:1,y:5},
-]
+];
+
+let score=0;
+let highScore=Number(localStorage.getItem("highScore")) || 0;
+let time=`00:00`;
+
 
 let direction='down';
 
@@ -102,6 +107,13 @@ function renderGame(){
             x:Math.floor(Math.random()*rows),
             y:Math.floor(Math.random()*cols)
         };
+        score++;
+        scoreElement.textContent=score;
+        if(score>highScore){
+            highScore=score;
+            localStorage.setItem("highScore",highScore.toString());
+        }
+        highScoreElement.textContent=highScore;
     }
 
     moveSnake(head,ateFood);
@@ -126,6 +138,8 @@ function rstGame(){
 
     // reset snake
     snake.length = 0;
+    score=0;
+    scoreElement.textContent=score;
     snake.push({ x: 1, y: 3 });
 
     // reset direction
@@ -140,8 +154,8 @@ function rstGame(){
 
 startBtn.addEventListener('click',startGame);
 rstBtn.addEventListener('click',()=>{
-    startGame(),
-    rstGame()
+    rstGame();
+    startGame();
 });
 
 
