@@ -134,6 +134,7 @@ function renderGame(){
 
 function startGame(){
     clearInterval(intervalId);
+    clearInterval(timerIntervalId)
     modal.style.display= "none" ;
     intervalId=setInterval(()=>{
         renderGame();  
@@ -151,7 +152,9 @@ function rstGame(){
         blocks[`${seg.x},${seg.y}`]?.classList.remove('fill');
     });
     blocks[`${food.x},${food.y}`]?.classList.remove('food');
-    timeElapased=0;
+    timeElapased = 0;
+    timeElement.textContent = formatTime(timeElapased);
+
 
     // reset snake
     snake.length = 0;
