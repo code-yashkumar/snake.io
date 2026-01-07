@@ -15,6 +15,7 @@ const blockWidth=50;
 const cols = Math.floor(board.clientWidth / blockWidth);
 const rows = Math.floor(board.clientHeight / blockHeight);
 let intervalId=null;
+let timerIntervalId=null;
 
 let food={
     x:Math.floor(Math.random()*rows),
@@ -30,7 +31,9 @@ const snake=[
 
 let score=0;
 let highScore=Number(localStorage.getItem("highScore")) || 0;
-let time=`00:00`;
+let timeElapased=0;
+// console.log(formatTime(timeElapased));
+
 
 
 let direction='down';
@@ -44,6 +47,13 @@ for(let row=0;row<rows;row++){
         blocks[`${row},${col}`]=block;
     }
 }
+
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
 
 function getNewHead(dir){
     let head;
@@ -96,6 +106,7 @@ function renderGame(){
         startModal.style.display='none';
         rstModal.style.display='flex';
         clearInterval(intervalId);
+        clearInterval(timerIntervalId);
         return;
     }
 
@@ -127,6 +138,11 @@ function startGame(){
     intervalId=setInterval(()=>{
         renderGame();  
     },400);
+    timerIntervalId=setInterval(()=>{
+        timeElapased++;
+        timeElement.textContent=formatTime(timeElapased);
+    },1000);
+
 };
 
 function rstGame(){
@@ -135,6 +151,7 @@ function rstGame(){
         blocks[`${seg.x},${seg.y}`]?.classList.remove('fill');
     });
     blocks[`${food.x},${food.y}`]?.classList.remove('food');
+    timeElapased=0;
 
     // reset snake
     snake.length = 0;
